@@ -1,0 +1,60 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : MyDesign
+Version: P-2019.03-SP1
+Date   : Wed Nov  4 03:35:00 2020
+****************************************
+
+Operating Conditions: slow   Library: NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm
+Wire Load Model Mode: top
+
+  Startpoint: clk_r_REG496_S1
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: dut_sram_read_address[11]
+            (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                  0.0000     0.0000
+  clock network delay (ideal)            0.0000     0.0000
+  clk_r_REG496_S1/CK (DFF_X1)            0.0000     0.0000 r
+  clk_r_REG496_S1/Q (DFF_X1)             0.5565     0.5565 f
+  U1993/ZN (INV_X1)                      0.1068     0.6633 r
+  U2964/ZN (NAND2_X1)                    0.1227     0.7860 f
+  U2356/CO (FA_X1)                       0.5179     1.3039 f
+  U2412/CO (FA_X1)                       0.5949     1.8988 f
+  U1906/ZN (INV_X1)                      0.1549     2.0536 r
+  U2414/ZN (AOI21_X1)                    0.1363     2.1899 f
+  U2073/ZN (AOI222_X1)                   0.9555     3.1454 r
+  U2418/ZN (AOI21_X1)                    0.2463     3.3916 f
+  U1909/ZN (AOI222_X1)                   1.0060     4.3976 r
+  U2422/ZN (AOI21_X1)                    0.2196     4.6172 f
+  U2424/ZN (NOR2_X1)                     0.2439     4.8611 r
+  U2426/ZN (NAND2_X1)                    0.1020     4.9631 f
+  U2431/ZN (AOI21_X1)                    0.3440     5.3071 r
+  U2432/ZN (OAI21_X1)                    0.1972     5.5043 f
+  U2433/ZN (NAND2_X1)                    0.1957     5.7000 r
+  U2434/ZN (OAI211_X1)                   0.1614     5.8614 f
+  U2435/Z (CLKBUF_X3)                    0.2719     6.1332 f
+  dut_sram_read_address[11] (out)        0.0000     6.1332 f
+  data arrival time                                 6.1332
+
+  clock clk (rise edge)                  6.9000     6.9000
+  clock network delay (ideal)            0.0000     6.9000
+  clock uncertainty                     -0.0500     6.8500
+  output external delay                 -0.5660     6.2840
+  data required time                                6.2840
+  -----------------------------------------------------------
+  data required time                                6.2840
+  data arrival time                                -6.1332
+  -----------------------------------------------------------
+  slack (MET)                                       0.1508
+
+
+1

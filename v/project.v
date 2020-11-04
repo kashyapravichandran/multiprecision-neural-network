@@ -29,32 +29,32 @@ wire [11:0] dut_sram_read_address, dut_wmem_read_address;
 wire dut_busy;
 // registers for pipeline stage 1
 
-reg [11:0] output_address_stage1;
-reg [15:0] input_stage1, weight_stage1;
+//reg [11:0] output_address_stage1;
+reg signed [15:0] input_stage1, weight_stage1;
 reg enable_write_stage1, select_adder_stage1;//busy_stage1;
 reg [2:0] select_input, select_weight;
 
 // wires and reg for datapath stage 1
 
-reg [7:0] input_mul_1, input_mul_2, weight_mul_1, weight_mul_2;
-wire [15:0] output_mul_1, output_mul_2;
+reg signed [7:0] input_mul_1, input_mul_2, weight_mul_1, weight_mul_2;
+wire signed [15:0] output_mul_1, output_mul_2;
 
 // registers for pipeline stage 2
 
-reg [11:0] output_address_stage2;
-reg [15:0] output_mul_1_stage2, output_mul_2_stage2;
+//reg [11:0] output_address_stage2;
+reg signed [15:0] output_mul_1_stage2, output_mul_2_stage2;
 reg select_adder_stage2, enable_write_stage2;//busy_stage2;
 
 //wires for the datapath stage 2
 
-wire [15:0] adder_input_1, adder_input_2, adder_input_3;
-wire [16:0] output_adder;
+wire signed [15:0] adder_input_1, adder_input_2, adder_input_3;
+wire signed [16:0] output_adder;
 
 // registers for pipeline stage 3
 
-reg[11:0] output_address_stage3;
+//reg[11:0] output_address_stage3;
 reg enable_write_stage3;// busy_stage3;
-reg [16:0] output_adder_stage3;
+reg signed [16:0] output_adder_stage3;
 
 // Registers for Address 
 
@@ -121,7 +121,7 @@ always @ (posedge clk)
 begin 
 	if(!reset_b)
 	begin 
-		output_address_stage1 <= 12'b0;
+		//output_address_stage1 <= 12'b0;
 		input_stage1 <= 16'b0;
 		weight_stage1 <= 16'b0;
 		enable_write_stage1 <= 1'b0;
@@ -132,7 +132,7 @@ begin
 	end
 	else 
 	begin
-		output_address_stage1 <= register_address_output;
+		//output_address_stage1 <= register_address_output;
 		input_stage1 <= sram_dut_read_data;
 		weight_stage1 <=wmem_dut_read_data;
 		select_adder_stage1 <= adder_control;
@@ -156,28 +156,28 @@ begin
 			input_mul_2 = 8'b0;
 			end 
 		3'b001: begin 
-			input_mul_1 = input_stage1[1:0];
-			input_mul_2 = input_stage1[3:2];
+			input_mul_1 = {{6{input_stage1[1]}},input_stage1[1:0]};
+			input_mul_2 = {{6{input_stage1[3]}},input_stage1[3:2]};
 			end
 		3'b010: begin 
-			input_mul_1 = input_stage1[5:4];
-			input_mul_2 = input_stage1[7:6];
+			input_mul_1 = {{6{input_stage1[5]}},input_stage1[5:4]};
+			input_mul_2 = {{6{input_stage1[7]}},input_stage1[7:6]};
 			end
 		3'b011: begin 
-			input_mul_1 = input_stage1[9:8];
-			input_mul_2 = input_stage1[11:10];
+			input_mul_1 = {{6{input_stage1[9]}},input_stage1[9:8]};	
+			input_mul_2 = {{6{input_stage1[11]}},input_stage1[11:10]};
 			end
 		3'b100: begin 
-			input_mul_1 = input_stage1[13:12];
-			input_mul_2 = input_stage1[15:14];
+			input_mul_1 = {{6{input_stage1[13]}},input_stage1[13:12]};
+			input_mul_2 = {{6{input_stage1[15]}},input_stage1[15:14]};
 			end
 		3'b101: begin 
-			input_mul_1 = input_stage1[3:0];
-			input_mul_2 = input_stage1[7:4];
+			input_mul_1 = {{4{input_stage1[3]}},input_stage1[3:0]};
+			input_mul_2 = {{4{input_stage1[7]}},input_stage1[7:4]};
 			end 
 		3'b110: begin 
-			input_mul_1 = input_stage1[11:8];
-			input_mul_2 = input_stage1[15:12];
+			input_mul_1 = {{4{input_stage1[11]}},input_stage1[11:8]};
+			input_mul_2 = {{4{input_stage1[15]}},input_stage1[15:12]};
  			end 
 		3'b111:begin 
 			input_mul_1 = input_stage1[7:0];
@@ -190,28 +190,28 @@ begin
 			weight_mul_2 = 8'b0;
 			end
 		3'b001: begin 
-			weight_mul_1 = weight_stage1[1:0];
-			weight_mul_2 = weight_stage1[3:2];
+			weight_mul_1 = {{6{weight_stage1[1]}},weight_stage1[1:0]};
+			weight_mul_2 = {{6{weight_stage1[3]}},weight_stage1[3:2]};
 			end
 		3'b010: begin 
-			weight_mul_1 = weight_stage1[5:4];
-			weight_mul_2 = weight_stage1[7:6];
+			weight_mul_1 = {{6{weight_stage1[5]}},weight_stage1[5:4]};
+			weight_mul_2 = {{6{weight_stage1[7]}},weight_stage1[7:6]};
 			end
 		3'b011: begin 
-			weight_mul_1 = weight_stage1[9:8];
-			weight_mul_2 = weight_stage1[11:10];
+			weight_mul_1 = {{6{weight_stage1[9]}},weight_stage1[9:8]};
+			weight_mul_2 = {{6{weight_stage1[11]}},weight_stage1[11:10]};
 			end
 		3'b100: begin 
-			weight_mul_1 = weight_stage1[13:12];
-			weight_mul_2 = weight_stage1[15:14];
+			weight_mul_1 = {{6{weight_stage1[13]}},weight_stage1[13:12]};
+			weight_mul_2 = {{6{weight_stage1[15]}},weight_stage1[15:14]};
 			end
 		3'b101: begin 
-			weight_mul_1 = weight_stage1[3:0];
-			weight_mul_2 = weight_stage1[7:4];
+			weight_mul_1 = {{4{weight_stage1[3]}},weight_stage1[3:0]};
+			weight_mul_2 = {{4{weight_stage1[7]}},weight_stage1[7:4]};
 			end 
 		3'b110: begin 
-			weight_mul_1 = weight_stage1[11:8];
-			weight_mul_2 = weight_stage1[15:12];
+			weight_mul_1 = {{4{weight_stage1[11]}},weight_stage1[11:8]};
+			weight_mul_2 = {{4{weight_stage1[15]}},weight_stage1[15:12]};
  			end 
 		3'b111:begin 
 			weight_mul_1 = weight_stage1[7:0];
@@ -233,7 +233,7 @@ begin
 	if(!reset_b)
 	begin
 		select_adder_stage2 <= 1'b0;
-		output_address_stage2 <= 12'b0;
+		//output_address_stage2 <= 12'b0;
 		enable_write_stage2 <= 1'b0;
 		output_mul_1_stage2 <= 16'b0;
 		output_mul_2_stage2 <= 16'b0; 
@@ -242,7 +242,7 @@ begin
 	else
 	begin
 		select_adder_stage2 <= select_adder_stage1;
-		output_address_stage2 <= output_address_stage1;
+		//output_address_stage2 <= output_address_stage1;
 		enable_write_stage2 <= enable_write_stage1;
 		output_mul_1_stage2 <= output_mul_1;
 		output_mul_2_stage2 <= output_mul_2; 
@@ -268,14 +268,14 @@ always @ (posedge clk)
 begin 
 	if(!reset_b)
 	begin
-		output_address_stage3 <= 12'b0;
+		//output_address_stage3 <= 12'b0;
 		enable_write_stage3 <= 1'b0;
 		output_adder_stage3 <= 17'b0;
 		//busy_stage3 <= 1'b0;  
 	end 
 	else 
 	begin
-		output_address_stage3 <= output_address_stage2;
+		//output_address_stage3 <= output_address_stage2;
 		enable_write_stage3 <= enable_write_stage2;
 		output_adder_stage3 <= output_adder; 
 		//busy_stage3 <= busy_stage2;
@@ -284,7 +284,7 @@ end
 
 // datapath of stage 3
 
-assign dut_sram_write_address = output_address_stage3;
+assign dut_sram_write_address = register_address_output;
 assign dut_sram_write_enable = enable_write_stage3;
 assign dut_sram_write_data = output_adder_stage3[15:0];
 
@@ -297,7 +297,7 @@ begin
 	begin 
 		register_address_weight <= 12'b0;
 		register_address_input <= 12'b0;
-		register_address_output <= 12'b0;
+		register_address_output <= 12'b111111111111;
 	end
 	else
 	begin
@@ -325,7 +325,7 @@ begin
 	2'b01: address_input = register_address_input+12'b1;
 	2'b10: address_input = (register_address_input+12'b1)-(size_input>>control_input_shift);
 	2'b11: address_input = 12'b0;
-	default: address_input = register_address_input;
+	//default: address_input = register_address_input;
 	endcase
 end
 
@@ -338,7 +338,7 @@ begin
 	case(address_output_select)
 	2'b00: address_output = register_address_output;
 	2'b01: address_output = register_address_output+12'b1;
-	2'b10: address_output = 12'b0;
+	2'b10: address_output = 12'hfff;
 	endcase
 	
 end 
@@ -391,14 +391,14 @@ begin
 		2'b01: count_input_column_mux_output = count_input_column;
 		2'b10: count_input_column_mux_output = count_input_column - input_column_subtract;
 		2'b11: count_input_column_mux_output = count_input_column;
-		default: count_input_column_mux_output = count_input_column;
+		//default: count_input_column_mux_output = count_input_column;
 	endcase
 	case(input_row_control)
 		2'b00: count_input_row_mux_output = size_input_mux_output;
 		2'b01: count_input_row_mux_output = count_input_row;
 		2'b10: count_input_row_mux_output = count_input_row - 8'b1;
 		2'b11: count_input_row_mux_output = count_input_row;
-		default: count_input_row_mux_output = count_input_row;
+		//default: count_input_row_mux_output = count_input_row;
 	endcase
 end
 
@@ -411,14 +411,14 @@ begin
 		2'b01: count_weight_column_mux_output = count_weight_column;
 		2'b10: count_weight_column_mux_output = count_weight_column - weight_column_subtract;
 		2'b11: count_weight_column_mux_output = count_weight_column;
-		default: count_weight_column_mux_output = count_weight_column;
+		//default: count_weight_column_mux_output = count_weight_column;
 	endcase
 	case(weight_row_control)
 		2'b00: count_weight_row_mux_output = size_weight_mux_output;
 		2'b01: count_weight_row_mux_output = count_weight_row;
 		2'b10: count_weight_row_mux_output = count_weight_row - 8'b1;
 		2'b11: count_weight_row_mux_output = count_weight_row;
-		default: count_weight_row_mux_output = count_weight_row;
+		//default: count_weight_row_mux_output = count_weight_row;
 	endcase
 end
 
